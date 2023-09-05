@@ -12,7 +12,6 @@ import com.example.authcomposeapp.AuthAppApplication
 import com.example.authcomposeapp.data.AuthRepository
 import com.example.authcomposeapp.network.request.LoginRequest
 import com.example.authcomposeapp.ui.common.LoginUiState
-import com.example.authcomposeapp.ui.common.RegisterUiState
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.io.IOException

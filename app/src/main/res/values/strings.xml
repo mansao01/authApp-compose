@@ -9,4 +9,5 @@
     <string name="enter_your_password">Ener your password</string>
     <string name="password">Password</string>
     <string name="enter_your_confirm_password">Enter password confirmation</string>
+    <string name="login">Login</string>
 </resources>
