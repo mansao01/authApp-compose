@@ -43,7 +43,7 @@ fun RegisterScreen(
     registerViewModel: RegisterViewModel = viewModel(factory = RegisterViewModel.Factory)
 ) {
     val context = LocalContext.current
-    registerViewModel.getUiState()
+//    registerViewModel.getUiState()
     when (uiState) {
         is RegisterUiState.StandBy -> RegisterContent(registerViewModel = registerViewModel)
         is RegisterUiState.Loading -> ProgressbarDialog()
@@ -54,7 +54,11 @@ fun RegisterScreen(
             )
         }
 
-        is RegisterUiState.Error -> mToast(context = context, message = uiState.msg)
+        is RegisterUiState.Error -> {
+            mToast(context = context, message = uiState.msg)
+            registerViewModel.getUiState()
+
+        }
     }
 
 }
