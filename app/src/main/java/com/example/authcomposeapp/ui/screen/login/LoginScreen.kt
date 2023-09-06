@@ -20,6 +20,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -56,7 +57,14 @@ fun LoginScreen(
 
         is LoginUiState.Loading -> ProgressbarDialog()
 //        is LoginUiState.Success -> uiState.loginResponse.accessToken?.let { navigateToHomeScreen(it) }
-        is LoginUiState.Success -> mToast(context, uiState.loginResponse.toString())
+        is LoginUiState.Success -> {
+            LaunchedEffect(Unit) {
+
+                uiState.loginResponse.accessToken?.let { navigateToHomeScreen(it) }
+                mToast(context, uiState.loginResponse.toString())
+            }
+        }
+
         is LoginUiState.Error -> {
             mToast(context, uiState.msg)
             loginViewModel.getUiState()
@@ -132,7 +140,7 @@ fun LoginContent(
 
             Button(
                 onClick = {
-                    when{
+                    when {
                         email.isEmpty() -> isEmailEmpty = true
                         password.isEmpty() -> isPasswordEmpty = true
                         else -> loginViewModel.login(LoginRequest(email, password))
