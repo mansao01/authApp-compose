@@ -11,6 +11,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.authcomposeapp.ui.navigation.Screen
 import com.example.authcomposeapp.ui.screen.home.HomeScreen
+import com.example.authcomposeapp.ui.screen.home.HomeViewModel
 import com.example.authcomposeapp.ui.screen.login.LoginScreen
 import com.example.authcomposeapp.ui.screen.login.LoginViewModel
 import com.example.authcomposeapp.ui.screen.register.RegisterScreen
@@ -42,12 +43,17 @@ fun AuthApp(
                 viewModel(factory = RegisterViewModel.Factory)
             RegisterScreen(uiState = registerViewModel.uiState)
         }
-        
-        composable(Screen.Home.route, arguments = listOf(navArgument("token"){
+
+        composable(Screen.Home.route, arguments = listOf(navArgument("token") {
             type = NavType.StringType
-        })){data ->
+        })) { data ->
             val token = data.arguments?.getString("token") ?: ""
-            HomeScreen(token = token)
+            val homeViewModel: HomeViewModel = viewModel(factory = HomeViewModel.Factory)
+            HomeScreen(
+                token = token,
+                homeViewModel = homeViewModel,
+                uiState = homeViewModel.uiState
+            )
         }
     }
 }

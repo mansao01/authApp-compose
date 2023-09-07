@@ -8,10 +8,10 @@ data class GetUsersResponse(
 	val msg: String,
 
 	@field:SerializedName("data")
-	val data: List<DataItem>
+	val data: List<UserDataItem>
 )
 
-data class DataItem(
+data class UserDataItem(
 
 	@field:SerializedName("name")
 	val name: String,
