@@ -10,4 +10,6 @@
     <string name="password">Password</string>
     <string name="enter_your_confirm_password">Enter password confirmation</string>
     <string name="login">Login</string>
+    <string name="hide_password">hide pass</string>
+    <string name="show_password">show pass\n</string>
 </resources>

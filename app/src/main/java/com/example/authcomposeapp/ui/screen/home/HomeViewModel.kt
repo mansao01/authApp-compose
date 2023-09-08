@@ -23,13 +23,14 @@ class HomeViewModel(
         private set
 
 
-    fun getUsers(token:String){
+    fun getUsersAndProfile(token: String) {
         viewModelScope.launch {
             uiState = HomeUiState.Loading
             uiState = try {
                 val result = authRepository.getAllUser("Bearer $token")
-                HomeUiState.Success(result.data)
-            }catch (e:Exception){
+                val resultProfile = authRepository.profile("Bearer $token")
+                HomeUiState.Success(result.data, resultProfile)
+            } catch (e: Exception) {
                 val errorMessage = when (e) {
                     is IOException -> "Network error occurred"
                     is HttpException -> {
@@ -46,6 +47,8 @@ class HomeViewModel(
             }
         }
     }
+
+
     companion object {
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
