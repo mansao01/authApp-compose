@@ -52,7 +52,7 @@ fun AuthApp(
             HomeScreen(
                 token = token,
                 homeViewModel = homeViewModel,
-                uiState = homeViewModel.uiState
+                uiState = homeViewModel.uiState,
             )
         }
     }

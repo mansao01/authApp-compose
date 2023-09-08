@@ -36,7 +36,7 @@ fun HomeScreen(
         is HomeUiState.Loading -> ProgressbarDialog()
         is HomeUiState.Success -> HomeContent(
             users = uiState.userDataItem,
-            profile = uiState.getProfileResponse
+            profile = uiState.getProfileResponse,
         )
 
         is HomeUiState.Error -> mToast(context = context, message = uiState.msg)

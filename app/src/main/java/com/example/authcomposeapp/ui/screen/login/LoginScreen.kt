@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
@@ -29,8 +30,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -77,7 +80,7 @@ fun LoginScreen(
 
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
 fun LoginContent(
     loginViewModel: LoginViewModel,
@@ -89,6 +92,8 @@ fun LoginContent(
     var isEmailEmpty by remember { mutableStateOf(false) }
     var isPasswordEmpty by remember { mutableStateOf(false) }
     var passwordVisibility by remember { mutableStateOf(false) } // Track password visibility
+    val keyboardController = LocalSoftwareKeyboardController.current
+
 
     Column(
         modifier = modifier
@@ -109,6 +114,14 @@ fun LoginContent(
             placeholder = { Text(text = stringResource(R.string.email)) },
             leadingIcon = { Icon(imageVector = Icons.Outlined.Email, contentDescription = null) },
             keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Email),
+            singleLine = true,
+            keyboardActions = KeyboardActions(
+                onDone = {
+                    if (isEmailValid(email)){
+                        keyboardController?.hide()
+                    }
+                }
+            ),
             isError = isEmailEmpty,
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
@@ -121,6 +134,7 @@ fun LoginContent(
             label = { Text(text = stringResource(R.string.enter_your_password)) },
             placeholder = { Text(text = stringResource(R.string.password)) },
             leadingIcon = { Icon(imageVector = Icons.Outlined.Lock, contentDescription = null) },
+            singleLine = true,
             visualTransformation = if (passwordVisibility) VisualTransformation.None else PasswordVisualTransformation(),
             isError = isPasswordEmpty,
             trailingIcon = {
@@ -167,7 +181,9 @@ fun LoginContent(
                     when {
                         email.isEmpty() -> isEmailEmpty = true
                         password.isEmpty() -> isPasswordEmpty = true
-                        else -> loginViewModel.login(LoginRequest(email, password))
+                        else -> {
+                            loginViewModel.login(LoginRequest(email, password))
+                        }
                     }
 
                 },
@@ -181,7 +197,10 @@ fun LoginContent(
         }
     }
 }
-
+private fun isEmailValid(email: String): Boolean {
+    // Add your email validation logic here
+    return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
+}
 private fun mToast(context: Context, message: String) {
     Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
 }

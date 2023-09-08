@@ -11,13 +11,14 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.authcomposeapp.AuthAppApplication
 import com.example.authcomposeapp.data.AuthRepository
 import com.example.authcomposeapp.network.request.LoginRequest
+import com.example.authcomposeapp.preferences.AuthTokenManager
 import com.example.authcomposeapp.ui.common.LoginUiState
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.io.IOException
 
 class LoginViewModel(
-    private val authRepository: AuthRepository
+    private val authRepository: AuthRepository, private val authTokenManager: AuthTokenManager
 ) : ViewModel() {
 
 
@@ -33,6 +34,7 @@ class LoginViewModel(
             uiState = LoginUiState.Loading
             uiState = try {
                 val result = authRepository.login(loginRequest)
+                result.accessToken?.let { authTokenManager.saveAccessToken(it) }
                 LoginUiState.Success(result)
 
             } catch (e: Exception) {
@@ -60,7 +62,8 @@ class LoginViewModel(
                 val application =
                     (this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as AuthAppApplication)
                 val authRepository = application.container.authRepository
-                LoginViewModel(authRepository = authRepository)
+                val authTokenManager = application.authTokenManager
+                LoginViewModel(authRepository = authRepository, authTokenManager = authTokenManager)
             }
         }
     }
