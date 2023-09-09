@@ -52,10 +52,11 @@ import com.example.authcomposeapp.ui.component.ProgressbarDialog
 fun LoginScreen(
     uiState: LoginUiState,
     loginViewModel: LoginViewModel = viewModel(factory = LoginViewModel.Factory),
-    navigateToHomeScreen: (String) -> Unit,
-    navigateToRegister: () -> Unit
+    navigateToHomeScreen: () -> Unit,
+    navigateToRegister: () -> Unit,
 ) {
     val context = LocalContext.current
+
 
     when (uiState) {
         is LoginUiState.StandBy -> LoginContent(
@@ -64,10 +65,9 @@ fun LoginScreen(
         )
 
         is LoginUiState.Loading -> ProgressbarDialog()
-//        is LoginUiState.Success -> uiState.loginResponse.accessToken?.let { navigateToHomeScreen(it) }
         is LoginUiState.Success -> {
             LaunchedEffect(Unit) {
-                uiState.loginResponse.accessToken?.let { navigateToHomeScreen(it) }
+                navigateToHomeScreen()
                 mToast(context, uiState.loginResponse.toString())
                 Log.d("Login", uiState.loginResponse.accessToken!!)
             }
@@ -77,6 +77,7 @@ fun LoginScreen(
             mToast(context, uiState.msg)
             loginViewModel.getUiState()
         }
+
     }
 
 }
@@ -118,7 +119,7 @@ fun LoginContent(
             singleLine = true,
             keyboardActions = KeyboardActions(
                 onDone = {
-                    if (isEmailValid(email)){
+                    if (isEmailValid(email)) {
                         keyboardController?.hide()
                     }
                 }
@@ -198,10 +199,12 @@ fun LoginContent(
         }
     }
 }
+
 private fun isEmailValid(email: String): Boolean {
     // Add your email validation logic here
     return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
 }
+
 private fun mToast(context: Context, message: String) {
     Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
 }

@@ -28,35 +28,42 @@ import com.example.authcomposeapp.ui.component.UserListItem
 fun HomeScreen(
     uiState: HomeUiState,
     homeViewModel: HomeViewModel = viewModel(factory = HomeViewModel.Factory),
-    navigateToLogin: () -> Unit
+    navigateToLogin: () -> Unit,
+    token: String?
+
 ) {
-    LaunchedEffect(Unit) {
-        homeViewModel.getUsersAndProfile()
-    }
     val context = LocalContext.current
-    when (uiState) {
-        is HomeUiState.Loading -> ProgressbarDialog()
-        is HomeUiState.Success -> {
-            val userData = uiState.userDataItem
-            val profile = uiState.getProfileResponse
-            val localToken = uiState.localToken
+    if (!token.isNullOrEmpty()){
 
-            HomeContent(
-                users = userData,
-                profile = profile,
-                homeViewModel = homeViewModel,
-                navigateToLogin = navigateToLogin
-            )
-            Log.d("HOME", localToken)
+        LaunchedEffect(Unit) {
+            homeViewModel.getUsersAndProfile()
         }
+        when (uiState) {
+            is HomeUiState.Loading -> ProgressbarDialog()
+            is HomeUiState.Success -> {
+                val userData = uiState.userDataItem
+                val profile = uiState.getProfileResponse
+                val localToken = uiState.localToken
 
-        is HomeUiState.Error -> {
-            LaunchedEffect(Unit) {
-                mToast(context = context, message = uiState.msg)
-                homeViewModel.removeAccessToken()
-                navigateToLogin()
+                HomeContent(
+                    users = userData,
+                    profile = profile,
+                    homeViewModel = homeViewModel,
+                    navigateToLogin = navigateToLogin
+                )
+                Log.d("HOME", localToken)
+            }
+
+            is HomeUiState.Error -> {
+                LaunchedEffect(Unit) {
+                    mToast(context = context, message = uiState.msg)
+                    homeViewModel.removeAccessToken()
+                    navigateToLogin()
+                }
             }
         }
+    }else{
+        Log.d("", "")
     }
 }
 

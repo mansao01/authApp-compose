@@ -69,7 +69,6 @@ fun RegisterScreen(
 fun RegisterContent(
     registerViewModel: RegisterViewModel,
     modifier: Modifier = Modifier,
-//    content: @Composable () -> Unit
 ) {
     Column(modifier.fillMaxSize()) {
         Text(

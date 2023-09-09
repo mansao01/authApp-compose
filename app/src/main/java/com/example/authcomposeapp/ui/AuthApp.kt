@@ -32,10 +32,10 @@ fun AuthApp(
             val loginViewModel: LoginViewModel = viewModel(factory = LoginViewModel.Factory)
             LoginScreen(
                 uiState = loginViewModel.uiState,
-                navigateToHomeScreen = { token ->
-                    navController.navigate(Screen.Home.createRoute(token))
+                navigateToHomeScreen = {
+                    navController.navigate(Screen.Home.route)
                 },
-                navigateToRegister = { navController.navigate(Screen.Register.route) }
+                navigateToRegister = { navController.navigate(Screen.Register.route) },
             )
         }
 
@@ -48,17 +48,16 @@ fun AuthApp(
 
         }
 
-        composable(Screen.Home.route, arguments = listOf(navArgument("token") {
-            type = NavType.StringType
-        })) { data ->
-//            val token = data.arguments?.getString("token") ?: ""
-            val homeViewModel: HomeViewModel = viewModel(factory = HomeViewModel.Factory)
+        composable(Screen.Home.route) {
+            val homeViewModel: HomeViewModel =
+                viewModel(factory = HomeViewModel.Factory)
             HomeScreen(
                 homeViewModel = homeViewModel,
                 uiState = homeViewModel.uiState,
                 navigateToLogin = {
                     navController.navigate(Screen.Login.route)
-                }
+                },
+                token = token
             )
         }
     }
