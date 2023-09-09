@@ -41,7 +41,7 @@ import com.example.authcomposeapp.ui.component.ProgressbarDialog
 fun RegisterScreen(
     uiState: RegisterUiState,
     registerViewModel: RegisterViewModel = viewModel(factory = RegisterViewModel.Factory),
-    navigateToLogin:() ->Unit
+    navigateToLogin: () -> Unit
 ) {
     val context = LocalContext.current
     when (uiState) {
@@ -70,6 +70,18 @@ fun RegisterContent(
     registerViewModel: RegisterViewModel,
     modifier: Modifier = Modifier,
 ) {
+    var name by remember { mutableStateOf("") }
+    var isNameNull by remember { mutableStateOf(false) }
+
+    var email by remember { mutableStateOf("") }
+    var isEmailNull by remember { mutableStateOf(false) }
+
+    var password by remember { mutableStateOf("") }
+    var isPasswordNull by remember { mutableStateOf(false) }
+
+    var confirmPassword by remember { mutableStateOf("") }
+    var isConfirmPasswordNull by remember { mutableStateOf(false) }
+
     Column(modifier.fillMaxSize()) {
         Text(
             text = stringResource(R.string.register),
@@ -79,38 +91,9 @@ fun RegisterContent(
                 .padding(horizontal = 32.dp)
                 .padding(top = 48.dp)
         )
-        var name by remember {
-            mutableStateOf("")
-        }
-        var isNameNull by remember {
-            mutableStateOf(false)
-        }
-
-        var email by remember {
-            mutableStateOf("")
-        }
-        var isEmailNull by remember {
-            mutableStateOf(false)
-        }
-
-        var password by remember {
-            mutableStateOf("")
-        }
-        var isPasswordNull by remember {
-            mutableStateOf(false)
-        }
-
-        var confirmPassword by remember {
-            mutableStateOf("")
-        }
-        var isConfirmPasswordNull by remember {
-            mutableStateOf(false)
-        }
         OutlinedTextField(
             value = name,
-            onValueChange = {
-                name = it
-            },
+            onValueChange = { name = it },
             textStyle = LocalTextStyle.current.copy(
                 textAlign = TextAlign.Left,
             ),

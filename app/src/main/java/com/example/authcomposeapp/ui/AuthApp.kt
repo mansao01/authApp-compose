@@ -4,11 +4,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
 import com.example.authcomposeapp.ui.navigation.Screen
 import com.example.authcomposeapp.ui.screen.home.HomeScreen
 import com.example.authcomposeapp.ui.screen.home.HomeViewModel
@@ -23,9 +21,10 @@ fun AuthApp(
     navController: NavHostController = rememberNavController(),
     token: String?
 ) {
+    val startDestination = if (!token.isNullOrEmpty()) Screen.Home.route else Screen.Login.route
     NavHost(
         navController = navController,
-        startDestination = if (!token.isNullOrEmpty()) Screen.Home.route else Screen.Login.route,
+        startDestination = startDestination,
         modifier = modifier
     ) {
         composable(Screen.Login.route) {
