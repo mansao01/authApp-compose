@@ -1,6 +1,7 @@
 package com.example.authcomposeapp.ui.screen.home
 
 import android.content.Context
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -34,10 +35,14 @@ fun HomeScreen(
     val context = LocalContext.current
     when (uiState) {
         is HomeUiState.Loading -> ProgressbarDialog()
-        is HomeUiState.Success -> HomeContent(
-            users = uiState.userDataItem,
-            profile = uiState.getProfileResponse,
-        )
+        is HomeUiState.Success -> {
+            HomeContent(
+                users = uiState.userDataItem,
+                profile = uiState.getProfileResponse,
+
+            )
+            Log.d("HOME", uiState.localToken)
+        }
 
         is HomeUiState.Error -> mToast(context = context, message = uiState.msg)
     }

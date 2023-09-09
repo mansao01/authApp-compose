@@ -10,13 +10,15 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.authcomposeapp.AuthAppApplication
 import com.example.authcomposeapp.data.AuthRepository
+import com.example.authcomposeapp.preferences.AuthTokenManager
 import com.example.authcomposeapp.ui.common.HomeUiState
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.io.IOException
 
 class HomeViewModel(
-    private val authRepository: AuthRepository
+    private val authRepository: AuthRepository,
+    private val authTokenManager: AuthTokenManager
 ) : ViewModel() {
 
     var uiState: HomeUiState by mutableStateOf(HomeUiState.Loading)
@@ -29,7 +31,8 @@ class HomeViewModel(
             uiState = try {
                 val result = authRepository.getAllUser("Bearer $token")
                 val resultProfile = authRepository.profile("Bearer $token")
-                HomeUiState.Success(result.data, resultProfile)
+                val localToken  = authTokenManager.getAccessToken()
+                HomeUiState.Success(result.data, resultProfile, localToken !!)
             } catch (e: Exception) {
                 val errorMessage = when (e) {
                     is IOException -> "Network error occurred"
@@ -55,7 +58,8 @@ class HomeViewModel(
                 val application =
                     (this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as AuthAppApplication)
                 val authRepository = application.container.authRepository
-                HomeViewModel(authRepository = authRepository)
+                val authTokenManager = application.authTokenManager
+                HomeViewModel(authRepository = authRepository, authTokenManager = authTokenManager)
             }
         }
     }

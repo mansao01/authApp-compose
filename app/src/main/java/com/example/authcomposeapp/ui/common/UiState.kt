@@ -21,6 +21,6 @@ sealed interface LoginUiState{
 
 sealed interface HomeUiState{
     object Loading : HomeUiState
-    data class Success(val userDataItem: List<UserDataItem>,val getProfileResponse: GetProfileResponse) : HomeUiState
+    data class Success(val userDataItem: List<UserDataItem>,val getProfileResponse: GetProfileResponse, val localToken:String) : HomeUiState
     data class Error(val msg:String) : HomeUiState
 }

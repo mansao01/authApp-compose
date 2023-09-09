@@ -1,6 +1,7 @@
 package com.example.authcomposeapp.ui.screen.login
 
 import android.content.Context
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -66,9 +67,9 @@ fun LoginScreen(
 //        is LoginUiState.Success -> uiState.loginResponse.accessToken?.let { navigateToHomeScreen(it) }
         is LoginUiState.Success -> {
             LaunchedEffect(Unit) {
-
                 uiState.loginResponse.accessToken?.let { navigateToHomeScreen(it) }
                 mToast(context, uiState.loginResponse.toString())
+                Log.d("Login", uiState.loginResponse.accessToken!!)
             }
         }
 
