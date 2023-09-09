@@ -20,11 +20,12 @@ import com.example.authcomposeapp.ui.screen.register.RegisterViewModel
 @Composable
 fun AuthApp(
     modifier: Modifier = Modifier,
-    navController: NavHostController = rememberNavController()
+    navController: NavHostController = rememberNavController(),
+    token: String?
 ) {
     NavHost(
         navController = navController,
-        startDestination = Screen.Login.route,
+        startDestination = if (!token.isNullOrEmpty()) Screen.Home.route else Screen.Login.route,
         modifier = modifier
     ) {
         composable(Screen.Login.route) {
@@ -41,18 +42,23 @@ fun AuthApp(
         composable(Screen.Register.route) {
             val registerViewModel: RegisterViewModel =
                 viewModel(factory = RegisterViewModel.Factory)
-            RegisterScreen(uiState = registerViewModel.uiState)
+            RegisterScreen(
+                uiState = registerViewModel.uiState,
+                navigateToLogin = { navController.navigate(Screen.Login.route) })
+
         }
 
         composable(Screen.Home.route, arguments = listOf(navArgument("token") {
             type = NavType.StringType
         })) { data ->
-            val token = data.arguments?.getString("token") ?: ""
+//            val token = data.arguments?.getString("token") ?: ""
             val homeViewModel: HomeViewModel = viewModel(factory = HomeViewModel.Factory)
             HomeScreen(
-                token = token,
                 homeViewModel = homeViewModel,
                 uiState = homeViewModel.uiState,
+                navigateToLogin = {
+                    navController.navigate(Screen.Login.route)
+                }
             )
         }
     }

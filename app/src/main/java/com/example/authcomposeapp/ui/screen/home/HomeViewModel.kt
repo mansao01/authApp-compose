@@ -25,13 +25,18 @@ class HomeViewModel(
         private set
 
 
-    fun getUsersAndProfile(token: String) {
+    fun removeAccessToken(){
         viewModelScope.launch {
+            authTokenManager.clearTokens()
+        }
+    }
+    fun getUsersAndProfile() {
+        viewModelScope.launch {
+            val localToken  = authTokenManager.getAccessToken()
             uiState = HomeUiState.Loading
             uiState = try {
-                val result = authRepository.getAllUser("Bearer $token")
-                val resultProfile = authRepository.profile("Bearer $token")
-                val localToken  = authTokenManager.getAccessToken()
+                val result = authRepository.getAllUser("Bearer $localToken")
+                val resultProfile = authRepository.profile("Bearer $localToken")
                 HomeUiState.Success(result.data, resultProfile, localToken !!)
             } catch (e: Exception) {
                 val errorMessage = when (e) {

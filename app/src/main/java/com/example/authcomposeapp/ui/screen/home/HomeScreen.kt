@@ -26,11 +26,11 @@ import com.example.authcomposeapp.ui.component.UserListItem
 @Composable
 fun HomeScreen(
     uiState: HomeUiState,
-    token: String,
-    homeViewModel: HomeViewModel = viewModel(factory = HomeViewModel.Factory)
+    homeViewModel: HomeViewModel = viewModel(factory = HomeViewModel.Factory),
+    navigateToLogin:() -> Unit
 ) {
     LaunchedEffect(Unit) {
-        homeViewModel.getUsersAndProfile(token)
+        homeViewModel.getUsersAndProfile()
     }
     val context = LocalContext.current
     when (uiState) {
@@ -40,11 +40,17 @@ fun HomeScreen(
                 users = uiState.userDataItem,
                 profile = uiState.getProfileResponse,
 
-            )
+                )
             Log.d("HOME", uiState.localToken)
         }
 
-        is HomeUiState.Error -> mToast(context = context, message = uiState.msg)
+        is HomeUiState.Error -> {
+            LaunchedEffect(Unit ){
+                mToast(context = context, message = uiState.msg)
+                homeViewModel.removeAccessToken()
+                navigateToLogin()
+            }
+        }
     }
 }
 

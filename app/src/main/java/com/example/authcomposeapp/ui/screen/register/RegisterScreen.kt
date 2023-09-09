@@ -40,10 +40,10 @@ import com.example.authcomposeapp.ui.component.ProgressbarDialog
 @Composable
 fun RegisterScreen(
     uiState: RegisterUiState,
-    registerViewModel: RegisterViewModel = viewModel(factory = RegisterViewModel.Factory)
+    registerViewModel: RegisterViewModel = viewModel(factory = RegisterViewModel.Factory),
+    navigateToLogin:() ->Unit
 ) {
     val context = LocalContext.current
-//    registerViewModel.getUiState()
     when (uiState) {
         is RegisterUiState.StandBy -> RegisterContent(registerViewModel = registerViewModel)
         is RegisterUiState.Loading -> ProgressbarDialog()
@@ -52,6 +52,7 @@ fun RegisterScreen(
                 context = context,
                 message = it
             )
+            navigateToLogin()
         }
 
         is RegisterUiState.Error -> {
