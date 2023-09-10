@@ -18,6 +18,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -48,11 +49,13 @@ fun RegisterScreen(
         is RegisterUiState.StandBy -> RegisterContent(registerViewModel = registerViewModel)
         is RegisterUiState.Loading -> ProgressbarDialog()
         is RegisterUiState.Success -> uiState.registerResponse.msg?.let {
-            mToast(
-                context = context,
-                message = it
-            )
-            navigateToLogin()
+            LaunchedEffect(Unit){
+                mToast(
+                    context = context,
+                    message = it
+                )
+                navigateToLogin()
+            }
         }
 
         is RegisterUiState.Error -> {
@@ -224,7 +227,6 @@ fun RegisterContent(
             Text(text = "Post")
         }
     }
-//    content()
 }
 
 private fun mToast(context: Context, message: String) {
