@@ -56,7 +56,7 @@ fun AuthApp(
                 navigateToLogin = {
                     navController.navigate(Screen.Login.route)
                 },
-                token = token
+//                token = token
             )
         }
     }

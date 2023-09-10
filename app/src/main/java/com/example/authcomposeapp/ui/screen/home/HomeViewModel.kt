@@ -25,11 +25,6 @@ class HomeViewModel(
         private set
 
 
-    fun removeAccessToken(){
-        viewModelScope.launch {
-            authTokenManager.clearTokens()
-        }
-    }
     fun getUsersAndProfile() {
         viewModelScope.launch {
             val localToken  = authTokenManager.getAccessToken()

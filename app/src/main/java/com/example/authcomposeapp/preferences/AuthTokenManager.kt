@@ -27,6 +27,7 @@ class AuthTokenManager(private val dataStore: DataStore<Preferences>) {
             preferences[accessTokenKey] ?: "null"
 
         }
+
     suspend fun saveAccessToken(token: String) {
         dataStore.edit { preferences ->
             preferences[accessTokenKey] = token
@@ -47,6 +48,12 @@ class AuthTokenManager(private val dataStore: DataStore<Preferences>) {
     suspend fun getAccessToken(): String? {
         val preferences = dataStore.data.first()
         return preferences[accessTokenKey]
+    }
+
+    fun getAccessTokenFlow(): Flow<String> {
+        return dataStore.data.map { preferences ->
+            preferences[accessTokenKey] ?: "null"
+        }
     }
 
     suspend fun clearTokens() {

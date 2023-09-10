@@ -57,7 +57,6 @@ fun LoginScreen(
 ) {
     val context = LocalContext.current
 
-
     when (uiState) {
         is LoginUiState.StandBy -> LoginContent(
             loginViewModel = loginViewModel,
@@ -68,7 +67,6 @@ fun LoginScreen(
         is LoginUiState.Success -> {
             LaunchedEffect(Unit) {
                 navigateToHomeScreen()
-                mToast(context, uiState.loginResponse.toString())
                 Log.d("Login", uiState.loginResponse.accessToken!!)
             }
         }
