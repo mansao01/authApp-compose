@@ -36,6 +36,7 @@ class LoginViewModel(
                 val result = authRepository.login(loginRequest)
                 result.accessToken?.let { authTokenManager.saveAccessToken(it) }
                 result.refreshToken?.let { authTokenManager.saveRefreshToken(it) }
+                authTokenManager.saveIsLoginState(true)
                 LoginUiState.Success(result)
 
             } catch (e: Exception) {

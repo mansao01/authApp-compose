@@ -1,5 +1,6 @@
 package com.example.authcomposeapp.preferences
 
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -8,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.authcomposeapp.AuthAppApplication
+import com.example.authcomposeapp.ui.navigation.Screen
 import kotlinx.coroutines.launch
 
 class AuthViewModel(
@@ -18,6 +20,27 @@ class AuthViewModel(
     private val _accessToken = mutableStateOf("")
     val accessToken: State<String?> = _accessToken
 
+    private val _startDestination: MutableState<String> = mutableStateOf(Screen.Login.route)
+    val startDestination: State<String> = _startDestination
+
+    fun saveIsLoginState(isLogin:Boolean){
+        viewModelScope.launch {
+            authTokenManager.saveIsLoginState(isLogin)
+        }
+    }
+
+    init {
+        viewModelScope.launch {
+            authTokenManager.getIsLoginState().collect{ isLogin ->
+                if (isLogin){
+                    _startDestination.value = Screen.Home.route
+                }else{
+                    _startDestination.value = Screen.Login.route
+
+                }
+            }
+        }
+    }
     suspend fun getAccessToken(){
         authTokenManager.getAccessTokenFlow().collect { token ->
             _accessToken.value = token

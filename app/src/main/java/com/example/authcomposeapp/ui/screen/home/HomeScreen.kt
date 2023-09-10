@@ -81,6 +81,7 @@ fun HomeScreen(
                     LaunchedEffect(Unit) {
                         mToast(context = context, message = uiState.msg)
                         authViewModel.removeAccessToken()
+                        authViewModel.saveIsLoginState(false)
                         navigateToLogin()
                     }
                 }
@@ -141,6 +142,7 @@ fun HomeTopBar(
             IconButton(onClick = {
                 logout()
                 authViewModel.removeAccessToken()
+                authViewModel.saveIsLoginState(false)
             }) {
                 Icon(imageVector = Icons.Default.Logout, contentDescription = "logout")
             }

@@ -3,6 +3,7 @@ package com.example.authcomposeapp.preferences
 import android.util.Log
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.stringPreferencesKey
@@ -16,6 +17,7 @@ import java.io.IOException
 class AuthTokenManager(private val dataStore: DataStore<Preferences>) {
     private val accessTokenKey = stringPreferencesKey("access_token")
     private val refreshTokenKey = stringPreferencesKey("refresh_token")
+    private val isLoginState = booleanPreferencesKey("is_login")
 
     val token: Flow<String> = dataStore.data
         .catch {
@@ -39,6 +41,29 @@ class AuthTokenManager(private val dataStore: DataStore<Preferences>) {
             preferences[refreshTokenKey] = token
         }
     }
+
+    suspend fun saveIsLoginState(isLogin: Boolean) {
+        dataStore.edit { preferences ->
+            preferences[isLoginState] = isLogin
+        }
+    }
+
+
+    fun getIsLoginState(): Flow<Boolean> {
+        return dataStore.data
+            .catch { exception ->
+                if (exception is IOException) {
+                    emit(emptyPreferences())
+                } else {
+                    throw exception
+                }
+            }
+            .map { preferences ->
+                val loginState = preferences[isLoginState] ?: false
+                loginState
+            }
+    }
+
 
     suspend fun getRefreshToken(): String? {
         val preferences = dataStore.data.first()
