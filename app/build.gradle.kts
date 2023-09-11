@@ -71,6 +71,9 @@ dependencies {
 
     implementation ("androidx.datastore:datastore-preferences:1.0.0")
 
+//    SplashAPi
+    implementation("androidx.core:core-splashscreen:1.0.1")
+
 
 
     testImplementation("junit:junit:4.13.2")

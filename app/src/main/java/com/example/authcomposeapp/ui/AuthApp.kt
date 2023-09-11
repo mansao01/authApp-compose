@@ -1,14 +1,12 @@
 package com.example.authcomposeapp.ui
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.authcomposeapp.preferences.AuthViewModel
 import com.example.authcomposeapp.ui.navigation.Screen
 import com.example.authcomposeapp.ui.screen.home.HomeScreen
 import com.example.authcomposeapp.ui.screen.home.HomeViewModel
@@ -21,12 +19,11 @@ import com.example.authcomposeapp.ui.screen.register.RegisterViewModel
 fun AuthApp(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
-    token: String?
+    startDestination: String
 ) {
-    val authViewModel:AuthViewModel = viewModel(factory = AuthViewModel.Factory)
-
+//    val authViewModel:AuthViewModel = viewModel(factory = AuthViewModel.Factory)
 //    val startDestination = if (!token.isNullOrEmpty()) Screen.Home.route else Screen.Login.route
-    val startDestination by authViewModel.startDestination
+//    val startDestination by authViewModel.startDestination
     NavHost(
         navController = navController,
         startDestination = startDestination,
@@ -51,7 +48,11 @@ fun AuthApp(
                 viewModel(factory = RegisterViewModel.Factory)
             RegisterScreen(
                 uiState = registerViewModel.uiState,
-                navigateToLogin = { navController.navigate(Screen.Login.route) })
+                navigateToLogin = {
+                    navController.popBackStack()
+                    navController.navigate(Screen.Login.route)
+                }
+            )
 
         }
 
@@ -65,7 +66,6 @@ fun AuthApp(
                     navController.navigate(Screen.Login.route)
                     navController.popBackStack()
                 },
-//                token = token
             )
         }
     }

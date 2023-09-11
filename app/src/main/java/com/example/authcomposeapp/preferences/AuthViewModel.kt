@@ -17,41 +17,47 @@ class AuthViewModel(
 
 ) : ViewModel() {
 
-    private val _accessToken = mutableStateOf("")
-    val accessToken: State<String?> = _accessToken
+//    private val _accessToken = mutableStateOf("")
+//    val accessToken: State<String?> = _accessToken
 
     private val _startDestination: MutableState<String> = mutableStateOf(Screen.Login.route)
     val startDestination: State<String> = _startDestination
 
-    fun saveIsLoginState(isLogin:Boolean){
+    private val _isLoading: MutableState<Boolean> = mutableStateOf(true)
+    val isLoading: State<Boolean> = _isLoading
+
+    init {
+        viewModelScope.launch {
+            authTokenManager.getIsLoginState().collect { isLogin ->
+                if (isLogin) {
+                    _startDestination.value = Screen.Home.route
+                } else {
+                    _startDestination.value = Screen.Login.route
+
+                }
+            }
+            _isLoading.value = false
+        }
+    }
+
+    fun saveIsLoginState(isLogin: Boolean) {
         viewModelScope.launch {
             authTokenManager.saveIsLoginState(isLogin)
         }
     }
 
-    init {
-        viewModelScope.launch {
-            authTokenManager.getIsLoginState().collect{ isLogin ->
-                if (isLogin){
-                    _startDestination.value = Screen.Home.route
-                }else{
-                    _startDestination.value = Screen.Login.route
+//    suspend fun getAccessToken() {
+//        authTokenManager.getAccessTokenFlow().collect { token ->
+//            _accessToken.value = token
+//        }
+//    }
 
-                }
-            }
-        }
-    }
-    suspend fun getAccessToken(){
-        authTokenManager.getAccessTokenFlow().collect { token ->
-            _accessToken.value = token
-        }
-    }
-
-    fun removeAccessToken(){
+    fun removeAccessToken() {
         viewModelScope.launch {
             authTokenManager.clearTokens()
         }
     }
+
     companion object {
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
