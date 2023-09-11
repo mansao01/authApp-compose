@@ -37,7 +37,6 @@ fun AuthApp(
                     navController.navigate(Screen.Home.route)
                 },
                 navigateToRegister = {
-                    navController.popBackStack()
                     navController.navigate(Screen.Register.route)
                 },
             )
@@ -49,7 +48,6 @@ fun AuthApp(
             RegisterScreen(
                 uiState = registerViewModel.uiState,
                 navigateToLogin = {
-                    navController.popBackStack()
                     navController.navigate(Screen.Login.route)
                 }
             )

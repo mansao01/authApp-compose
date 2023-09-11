@@ -104,7 +104,9 @@ fun LoginContent(
             text = stringResource(R.string.login),
             color = MaterialTheme.colorScheme.primary,
             fontSize = 36.sp,
-            modifier = Modifier.padding(top = 48.dp)
+            modifier = Modifier
+                .padding(horizontal = 32.dp)
+                .padding(top = 48.dp)
         )
 
         OutlinedTextField(

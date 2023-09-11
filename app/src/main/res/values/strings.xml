@@ -1,15 +1,15 @@
 <resources>
     <string name="app_name">Auth Compose App</string>
     <string name="register">Register</string>
-    <string name="enter_your_name">Enter your name\n</string>
-    <string name="name">Name\n</string>
+    <string name="enter_your_name">Enter your name</string>
+    <string name="name">Name</string>
     <string name="require">require</string>
     <string name="enter_your_email">Enter your email</string>
     <string name="email">Email</string>
-    <string name="enter_your_password">Ener your password</string>
+    <string name="enter_your_password">Enter your password</string>
     <string name="password">Password</string>
-    <string name="enter_your_confirm_password">Enter password confirmation</string>
     <string name="login">Login</string>
     <string name="hide_password">hide pass</string>
-    <string name="show_password">show pass\n</string>
+    <string name="show_password">show pass</string>
+    <string name="re_enter_passowrd">Re-enter your password</string>
 </resources>

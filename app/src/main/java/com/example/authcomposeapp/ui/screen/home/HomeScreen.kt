@@ -26,6 +26,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.authcomposeapp.network.response.GetProfileResponse
@@ -152,4 +153,11 @@ fun HomeTopBar(
 
 private fun mToast(message: String, context: Context) {
     Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+}
+
+@Preview(showBackground = true)
+@Composable
+fun HomeContentPreview() {
+    val listUser = listOf(UserDataItem("bambang", 1, "bambang@gmail.com"))
+    HomeContent(users =listUser, profile =GetProfileResponse("bambang", "bambang@gmail.com"))
 }

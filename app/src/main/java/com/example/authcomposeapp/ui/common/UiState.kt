@@ -9,19 +9,24 @@ sealed interface RegisterUiState {
     object StandBy : RegisterUiState
     object Loading : RegisterUiState
     data class Success(val registerResponse: RegisterResponse) : RegisterUiState
-    data class Error(val msg:String) : RegisterUiState
+    data class Error(val msg: String) : RegisterUiState
 }
 
-sealed interface LoginUiState{
+sealed interface LoginUiState {
     object StandBy : LoginUiState
     object Loading : LoginUiState
     data class Success(val loginResponse: LoginResponse) : LoginUiState
-    data class Error(val msg:String) : LoginUiState
+    data class Error(val msg: String) : LoginUiState
 }
 
-sealed interface HomeUiState{
-//    data class Prep(val token:String) : HomeUiState
+sealed interface HomeUiState {
+    //    data class Prep(val token:String) : HomeUiState
     object Loading : HomeUiState
-    data class Success(val userDataItem: List<UserDataItem>,val getProfileResponse: GetProfileResponse, val localToken:String) : HomeUiState
-    data class Error(val msg:String) : HomeUiState
+    data class Success(
+        val userDataItem: List<UserDataItem>,
+        val getProfileResponse: GetProfileResponse,
+        val localToken: String
+    ) : HomeUiState
+
+    data class Error(val msg: String) : HomeUiState
 }
